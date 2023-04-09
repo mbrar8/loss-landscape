@@ -67,11 +67,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', '-m', default='dense_entropy')
 
-
+    args = parser.parse_args()
 
     use_cuda = torch.cuda.is_available()
-    print('Current devices: ' + str(torch.cuda.current_device()))
-    print('Device ct: ' + str(torch.cuda.device_count()))
+    #print('Current devices: ' + str(torch.cuda.current_device()))
+    #print('Device ct: ' + str(torch.cuda.device_count()))
 
     lr = 0.0001
     st_epoch = 1
@@ -80,9 +80,9 @@ if __name__ == '__main__':
     if not os.path.exists('trained/' + save_folder):
         os.makedirs('trained/' + save_folder)
 
-    f = open('trained/' + save_folder + '/log.out', 'a', 0)
+    #f = open('trained/' + save_folder + '/log.out', 'a', 0)
 
-    trainloader, testloader = dataloader.get_data_loaders()
+    trainloader, testloader = dataloader.load_dataset()
 
     net, lossfxn = model_loader.load(args.model)
     
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         test_loss, test_err = test(testloader, net, lossfxn, use_cuda)
         status = 'e: %d loss: %.5f train_err: %.3f test_top1: %.3f test_loss %.5f \n' % (epoch, train_loss, train_err, test_err, test_loss)
         print(status)
-        f.write(status)
+        #f.write(status)
 
         acc = 100 - test_err
         if epoch == 10:
@@ -112,7 +112,7 @@ if __name__ == '__main__':
            torch.save(state, 'trained/' + save_folder + '/model_' + str(epoch) + '.t7')
            torch.save(opt_state, 'trained/' + save_folder + '/opt_state_' + str(epoch) + '.t7')
 
-    f.close()   
+    #f.close()   
     
 
 

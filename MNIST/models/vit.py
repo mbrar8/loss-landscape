@@ -1,7 +1,7 @@
 
 import torch
 import torch.nn as nn
-from vit_pytorch import ViT
+#from vit_pytorch import ViT
 
 # B -> Batch Size
 # C -> Number of Input Channels

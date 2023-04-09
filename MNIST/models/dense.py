@@ -11,6 +11,7 @@ from torch.autograd import Variable
 class Dense(nn.Module):
     def __init__(self):
         super().__init__()
+        self.flat = nn.Flatten()
         self.fc1 = nn.Linear(28*28, 64)
         self.fc2 = nn.Linear(64, 64)
         self.fc3 = nn.Linear(64, 64)
@@ -19,6 +20,7 @@ class Dense(nn.Module):
 
 
     def forward(self, x):
+        x = self.flat(x)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))

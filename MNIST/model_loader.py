@@ -1,9 +1,8 @@
 import os
 import torch, torchvision
-import MNIST.models.dense as dense
-import MNIST.models.cnn as cnn
-import MNIST.models.vit as vit
-import cifar10.model_loader
+import models.dense as dense
+import models.cnn as cnn
+import models.vit as vit
 
 models = {
     'dense_entropy': dense.DenseEntropy(),
@@ -22,15 +21,15 @@ models = {
 
 
 def load(model_name, model_file=None):
-    (net, loss) = models[model_name]()
+    (net, loss) = models[model_name]
 
     if model_file:
         assert os.path.exists(model_file), model_name+model_file + "does not exist."
         stored = torch.load(model_file, map_location=lambda storage, loc: storage)
-    if 'state_dict' in stored.keys():
-        net.load_state_dict(stored['state_dict'])
-    else:
-        net.load_state_dict(stored) 
+        if 'state_dict' in stored.keys():
+            net.load_state_dict(stored['state_dict'])
+        else:
+            net.load_state_dict(stored) 
 
     net.eval()
     return (net, loss)
