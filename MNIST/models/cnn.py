@@ -28,7 +28,16 @@ class CNN(nn.Module):
 def CNNentropy():
     return (CNN(), nn.CrossEntropyLoss)
 
-#def CNN01():
+def CNNnll():
+    return(CNN(), torch.nn.NLLLoss)
 
+def CNNkldiv():
+    return (CNN(), torch.nn.KLDivLoss)
+
+def CNNpoissoinnll():
+    return (CNN(), torch.nn.PoissonNLLLoss)
+
+def CNNgaussiannll():
+    return (CNN(), torch.nn.GaussianNLLLoss)
 
         
