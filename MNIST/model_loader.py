@@ -16,7 +16,7 @@ models = {
         'cnn_kldiv'     : cnn.CNNkldiv(),
         'cnn_gaussiannll': cnn.CNNgaussiannll(),
         'cnn_poissonnll': cnn.CNNpoissoinnll(),
-        'vit_entropy'   : vit.entropy(),
+        #'vit_entropy'   : vit.entropy(),
         }
 
 
