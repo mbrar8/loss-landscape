@@ -28,7 +28,11 @@ def load(model_name, model_file=None):
 
     if model_file:
         assert os.path.exists(model_file), model_name+model_file + "does not exist."
-        # some stuff 
+        stored = torch.load(model_file, map_location=lambda storage, loc: storage)
+	if 'state_dict' in stored.keys():
+		net.load_state_dict(stored['state_dict'])
+	else:
+		net.load_state_dict(stored) 
 
     net.eval()
     return (net, loss)
