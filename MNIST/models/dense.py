@@ -24,21 +24,23 @@ class Dense(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
-        x = F.log_softmax(self.fc4(x), dim=1)
+        # I think CrossEntropyLoss expects logits directly
+        #x = F.log_softmax(self.fc4(x), dim=1)
+        x = self.fc4(x)
 
         return x
     
 def DenseEntropy():
-    return (Dense(), nn.CrossEntropyLoss)
+    return (Dense(), torch.nn.CrossEntropyLoss())
 
 def Densenll():
-    return (Dense(), torch.nn.NLLLoss)
+    return (Dense(), torch.nn.NLLLoss())
 
 def Densekldiv():
-    return (Dense(), torch.nn.KLDivLoss)
+    return (Dense(), torch.nn.KLDivLoss())
 
 def Densepoissoinnll():
-    return (Dense(), torch.nn.PoissonNLLLoss)
+    return (Dense(), torch.nn.PoissonNLLLoss())
 
 def Densegaussiannll():
-    return (Dense(), torch.nn.GaussianNLLLoss)
+    return (Dense(), torch.nn.GaussianNLLLoss())
