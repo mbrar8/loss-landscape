@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
         if avg_vloss < best_vloss:
             best_vloss = avg_vloss
-            model_path = '{}model_{}_{}'.format(save_path, timestamp, epoch) 
+            model_path = '{}model_{}'.format(save_path, epoch) 
             torch.save(model.state_dict(), model_path)
 
         epoch += 1
