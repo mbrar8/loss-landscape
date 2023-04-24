@@ -70,7 +70,7 @@ def setup_surface_file(args, surf_file, dir_file):
     return surf_file
 
 
-def crunch(surf_file, net, w, s, d, dataloader, loss_key, acc_key, comm, rank, args):
+def crunch(surf_file, lossfxn, net, w, s, d, dataloader, loss_key, acc_key, comm, rank, args):
     """
         Calculate the loss values and accuracies of modified models in parallel
         using MPI reduce.
@@ -101,9 +101,10 @@ def crunch(surf_file, net, w, s, d, dataloader, loss_key, acc_key, comm, rank, a
     start_time = time.time()
     total_sync = 0.0
 
-    criterion = nn.CrossEntropyLoss()
-    if args.loss_name == 'mse':
-        criterion = nn.MSELoss()
+    criterion = lossfxn
+    #criterion = nn.CrossEntropyLoss()
+    #if args.loss_name == 'mse':
+    #    criterion = nn.MSELoss()
 
     # Loop over all uncalculated loss values
     for count, ind in enumerate(inds):
@@ -241,7 +242,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Load models and extract parameters
     #--------------------------------------------------------------------------
-    net = model_loader.load(args.dataset, args.model, args.model_file)
+    net, loss = model_loader.load(args.dataset, args.model, args.model_file)
     w = net_plotter.get_weights(net) # initial parameters
     s = copy.deepcopy(net.state_dict()) # deepcopy since state_dict are references
     if args.ngpu > 1:
@@ -276,6 +277,9 @@ if __name__ == '__main__':
     if rank == 0 and args.dataset == 'cifar10':
         torchvision.datasets.CIFAR10(root=args.dataset + '/data', train=True, download=True)
 
+    if rank == 0 and args.dataset == 'MNIST':
+        torchvision.datasets.MNIST(root=args.dataset + '/data', train=True, download=True)
+
     mpi.barrier(comm)
 
     trainloader, testloader = dataloader.load_dataset(args.dataset, args.datapath,
@@ -286,7 +290,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Start the computation
     #--------------------------------------------------------------------------
-    crunch(surf_file, net, w, s, d, trainloader, 'train_loss', 'train_acc', comm, rank, args)
+    crunch(surf_file, loss, net, w, s, d, trainloader, 'train_loss', 'train_acc', comm, rank, args)
     # crunch(surf_file, net, w, s, d, testloader, 'test_loss', 'test_acc', comm, rank, args)
 
     #--------------------------------------------------------------------------
