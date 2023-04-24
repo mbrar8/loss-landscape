@@ -14,7 +14,53 @@ import torch.nn.parallel
 
 import model_loader
 import dataloader
-from datetime import datetime
+
+
+def train(trainloader, net, lossfxn, optimizer, use_cuda=True):
+    net.train()
+    train_loss = 0
+    correct = 0
+    total = 0
+
+    for batch_idx, (inputs, targets) in enumerate(trainloader):
+        batch_size = inputs.size(0)
+        total += batch_size
+        if use_cuda:
+            inputs, targets = inputs.cuda(), targets.cuda()
+        optimizer.zero_grad()
+        inputs, targets = Variable(inputs), Variable(targets)
+        outputs = net(inputs)
+        loss = lossfxn(outputs, targets)
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.item()*batch_size
+        _, predicted = torch.max(outputs.data, 1)
+        correct += predicted.eq(targets.data).cpu().sum().item()
+
+
+    return train_loss/total, 100 - 100.*correct/total
+
+
+def test(testloader, net, lossfxn, use_cuda=True):
+    net.eval()
+    test_loss = 0
+    correct = 0
+    total = 0
+    
+    for batch_idx, (inputs, targets) in enumerate(testloader):
+        batch_size = inputs.size(0)
+        total += batch_size
+
+        if use_cuda:
+            inputs, targets = inputs.cuda(), targets.cuda()
+        inputs, targets = Variable(inputs), Variable(targets)
+        outputs = net(inputs)
+        loss = lossfxn(outputs, targets)
+        test_loss += loss.item()*batch_size
+        _, predicted = torch.max(outputs.data, 1)
+        correct += predicted.eq(targets.data).cpu().sum().item()
+
+    return test_loss/total, 100 - 100.*correct/total
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -27,61 +73,46 @@ if __name__ == '__main__':
     #print('Device ct: ' + str(torch.cuda.device_count()))
 
     lr = 0.0001
+    st_epoch = 1
 
-    print('Creating save location')
     save_folder = args.model
-    save_path = 'trained/' + save_folder + '/'
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
+    if not os.path.exists('trained/' + save_folder):
+        os.makedirs('trained/' + save_folder)
 
+    #f = open('trained/' + save_folder + '/log.out', 'a', 0)
 
-    print('Loading data')
     trainloader, testloader = dataloader.load_dataset()
 
-    print('Getting model and loss function')
-    model, lossfxn = model_loader.load(args.model)
+    net, lossfxn = model_loader.load(args.model)
+    
+    if use_cuda:
+        net.cuda()
+        lossfxn = lossfxn.cuda()
 
-
-    print('Optimizer: Adam')
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=0.0005)
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-
-    best_vloss = 100000000
+    optimizer = optim.Adam(net.parameters(), lr=lr, weight_decay=0.0005)
 
     for epoch in range(1, 11):
-        print('Epoch: ' + str(epoch))
-        model.train(True)
-        running_loss = 0.0
-        last_loss = 0.0
-        for i, data in enumerate(trainloader):
-            inputs, labels = data
-            optimizer.zero_grad()
-            outputs = model(inputs)
-            loss = lossfxn(outputs, labels)
-            loss.backward()
+        train_loss, train_err = train(trainloader, net, lossfxn, optimizer, use_cuda)
+        test_loss, test_err = test(testloader, net, lossfxn, use_cuda)
+        status = 'e: %d loss: %.5f train_err: %.3f test_top1: %.3f test_loss %.5f \n' % (epoch, train_loss, train_err, test_err, test_loss)
+        print(status)
+        #f.write(status)
 
-            optimizer.step()
-            running_loss += loss.item()
-            if i % 1000 == 999:
-                last_loss = running_loss / 1000
-                print('   batch {} loss: {}'.format(i+1, last_loss))
-                running_loss = 0.0 
-        model.train(False)
-        val_loss = 0.0
-        for i, vdata in enumerate(testloader):
-            vinputs, vlabels = vdata
-            voutputs = model(vinputs)
-            vloss = lossfxn(voutputs, vlabels)
-            val_loss += vloss
-        avg_vloss = val_loss / (i + 1)
-        print('LOSS train {} valid {}'.format(last_loss, avg_vloss))
+        acc = 100 - test_err
+        if epoch == 10:
+           state = {
+             'acc': acc,
+             'epoch': epoch,
+             'state_dict': net.state_dict()
+           }
+           opt_state = {
+              'optimizer': optimizer.state_dict()
+           }
+           torch.save(state, 'trained/' + save_folder + '/model_' + str(epoch) + '.t7')
+           torch.save(opt_state, 'trained/' + save_folder + '/opt_state_' + str(epoch) + '.t7')
 
-        if avg_vloss < best_vloss:
-            best_vloss = avg_vloss
-            model_path = '{}model_{}'.format(save_path, epoch) 
-            torch.save(model.state_dict(), model_path)
-
-        epoch += 1
+    #f.close()   
+    
 
 
 
