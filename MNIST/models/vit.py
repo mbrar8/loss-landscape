@@ -146,20 +146,20 @@ class ViT(nn.Module):
     
 
 def vitEntropy():
-    return (ViT(), torch.nn.CrossEntropyLoss)
+    return (ViT(), torch.nn.CrossEntropyLoss())
 
 
 def vitNll():
-    return (ViT(), torch.nn.NLLLoss)
+    return (ViT(), torch.nn.NLLLoss())
 
 
 def vitKldiv():
-    return (ViT(), torch.nn.KLDivLoss)
+    return (ViT(), torch.nn.KLDivLoss())
 
 
 def vitPoissoinnll():
-    return (ViT(), torch.nn.PoissonNLLLoss)
+    return (ViT(), torch.nn.PoissonNLLLoss())
 
 
 def vitGaussiannll():
-    return (ViT(), torch.nn.GaussianNLLLoss)
+    return (ViT(), torch.nn.GaussianNLLLoss())
