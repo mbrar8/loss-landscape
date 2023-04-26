@@ -54,8 +54,12 @@ def setup_surface_file(args, surf_file, dir_file):
             f.close()
             print ("%s is already set up" % surf_file)
             return
+        f.close()
 
     f = h5py.File(surf_file, 'a')
+    if 'dir_file' in f.keys():
+        del f['dir_file']  # delete the existing dir_file
+
     f['dir_file'] = dir_file
 
     # Create the coordinates(resolutions) at which the function is evaluated

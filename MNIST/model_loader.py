@@ -1,5 +1,6 @@
 import os
 import torch, torchvision
+# add MNIST for slurm
 import models.dense as dense
 import models.cnn as cnn
 import models.vit as vit
