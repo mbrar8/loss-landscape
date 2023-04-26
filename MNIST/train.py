@@ -29,8 +29,9 @@ if __name__ == '__main__':
     st_epoch = 1
 
     save_folder = args.model
-    if not os.path.exists('trained/' + save_folder):
-        os.makedirs('trained/' + save_folder)
+    save_path = 'trained/' + save_folder + '/'
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
 
     trainloader, testloader = dataloader.load_dataset()
 
@@ -41,6 +42,8 @@ if __name__ == '__main__':
     #    lossfxn = lossfxn.cuda()
 
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=0.0005)
+
+    best_vloss = 100000000
 
     for epoch in range(1, 11):
         print('Epoch: ' + str(epoch))
