@@ -57,12 +57,8 @@ if __name__ == '__main__':
             print("data")
             print(outputs)
             print(labels)
-            if isinstance(lossfxn, torch.nn.GaussianNLLLoss):
-                print(outputs.shape)
-                print(outputs.size())
-                var = torch.ones(128, 1, requires_grad=True)
-                print(var.size())
-                loss = lossfxn(outputs, labels, var)
+            if isinstance(lossfxn, torch.nn.KLDivLoss):
+                loss = lossfxn(F.log_softmax(outputs), labels)
             else:
                 loss = lossfxn(outputs, labels)
             loss.backward()
