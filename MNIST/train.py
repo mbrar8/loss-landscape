@@ -50,6 +50,7 @@ if __name__ == '__main__':
         for i, data in enumerate(trainloader):
             inputs, labels = data
             optimizer.zero_grad()
+            print("Pass thr;ough model")
             outputs = model(inputs)
             print("data")
             print(outputs)
