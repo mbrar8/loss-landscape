@@ -57,6 +57,9 @@ if __name__ == '__main__':
             inputs, labels = data
             optimizer.zero_grad()
             outputs = model(inputs)
+            print("data")
+            print(outputs)
+            print(labels)
             loss = lossfxn(outputs, labels)
             loss.backward()
 
