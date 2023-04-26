@@ -57,7 +57,14 @@ if __name__ == '__main__':
             print("data")
             print(outputs)
             print(labels)
-            loss = lossfxn(outputs, labels)
+            if isinstance(lossfxn, torch.nn.GaussianNLLLoss):
+                print(outputs.shape)
+                print(outputs.size())
+                var = torch.ones(128, 1, requires_grad=True)
+                print(var.size())
+                loss = lossfxn(outputs, labels, var)
+            else:
+                loss = lossfxn(outputs, labels)
             loss.backward()
 
             optimizer.step()
