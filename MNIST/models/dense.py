@@ -36,6 +36,9 @@ def DenseEntropy():
 def Densenll():
     return (Dense(), torch.nn.NLLLoss())
 
+def Densemargin():
+    return (Dense(), torch.nn.MultiMarginLoss())
+
 def Densekldiv():
     return (Dense(), torch.nn.KLDivLoss())
 
