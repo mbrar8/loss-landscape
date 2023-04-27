@@ -92,7 +92,7 @@ class Transformer(nn.Module):
 
 
 class ViT(nn.Module):
-    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool='cls', channels=3, dim_head=64, dropout=0., emb_dropout=0.):
+    def __init__(self, *, image_size=28, patch_size=7, num_classes=10, dim=128, depth=1, heads=3, mlp_dim=128, pool='cls', channels=1, dim_head=64, dropout=0., emb_dropout=0.):
         super().__init__()
         image_height, image_width = pair(image_size)
         patch_height, patch_width = pair(patch_size)
@@ -148,6 +148,8 @@ class ViT(nn.Module):
 def vitEntropy():
     return (ViT(), torch.nn.CrossEntropyLoss())
 
+def vitMargin():
+    return (ViT(), torch.nn.MultiMarginLoss())
 
 def vitNll():
     return (ViT(), torch.nn.NLLLoss())
