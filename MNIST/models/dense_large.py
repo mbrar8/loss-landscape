@@ -65,3 +65,7 @@ def LargeDenseEntropy():
 
 def LargeDensenll():
     return (LargeDense(), torch.nn.NLLLoss())
+
+
+def LargeDensemargin():
+    return (LargeDense(), torch.nn.MultiMarginLoss())
