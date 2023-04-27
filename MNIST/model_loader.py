@@ -13,6 +13,8 @@ models = {
         'dense_poissonnll': dense.Densepoissoinnll(),
         'small_dense_entropy': dense_small.SmallDenseEntropy(),
         'small_dense_nll': dense_small.SmallDensenll(),
+        'large_dense_entropy' : dense_large.LargeDenseEntropy(),
+        'large_dense_nll' : dense_large.LargeDensenll(),
         'cnn_entropy'   : cnn.CNNentropy(),
         'cnn_nll'       : cnn.CNNnll(),
         'cnn_kldiv'     : cnn.CNNkldiv(),
