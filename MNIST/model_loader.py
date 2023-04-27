@@ -2,6 +2,7 @@ import os
 import torch, torchvision
 import models.dense as dense
 import models.dense_small as dense_small
+import models.dense_large as dense_large
 import models.cnn as cnn
 import models.vit as vit
 
@@ -13,6 +14,8 @@ models = {
         'dense_poissonnll': dense.Densepoissoinnll(),
         'small_dense_entropy': dense_small.SmallDenseEntropy(),
         'small_dense_nll': dense_small.SmallDensenll(),
+        'large_dense_entropy' : dense_large.LargeDenseEntropy(),
+        'large_dense_nll' : dense_large.LargeDensenll(),
         'cnn_entropy'   : cnn.CNNentropy(),
         'cnn_nll'       : cnn.CNNnll(),
         'cnn_kldiv'     : cnn.CNNkldiv(),
