@@ -1,10 +1,10 @@
 import os
 import torch, torchvision
-import models.dense as dense
-import models.dense_small as dense_small
-import models.dense_large as dense_large
-import models.cnn as cnn
-import models.vit as vit
+import MNIST.models.dense as dense
+import MNIST.models.dense_small as dense_small
+import MNIST.models.dense_large as dense_large
+import MNIST.models.cnn as cnn
+import MNIST.models.vit as vit
 
 models = {
     'dense_entropy': dense.DenseEntropy(),
