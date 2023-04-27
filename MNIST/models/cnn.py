@@ -34,6 +34,9 @@ def CNNentropy():
 def CNNnll():
     return(CNN(), torch.nn.NLLLoss())
 
+def CNNmargin():
+    return (CNN(), torch.nn.MultiMarginLoss())
+
 def CNNkldiv():
     return (CNN(), torch.nn.KLDivLoss())
 

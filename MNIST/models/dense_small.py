@@ -29,6 +29,9 @@ def SmallDenseEntropy():
 def SmallDensenll():
     return (SmallDense(), torch.nn.NLLLoss())
 
+def SmallDensemargin():
+    return (SmallDense(), torch.nn.MultiMarginLoss())
+
 def Densekldiv():
     return (Dense(), torch.nn.KLDivLoss())
 

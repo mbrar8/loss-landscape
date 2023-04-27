@@ -12,15 +12,19 @@ models = {
         'dense_kldiv': dense.Densekldiv(),
         'dense_gaussiannll': dense.Densegaussiannll(),
         'dense_poissonnll': dense.Densepoissoinnll(),
+        'dense_margin': dense.Densemargin(),
         'small_dense_entropy': dense_small.SmallDenseEntropy(),
         'small_dense_nll': dense_small.SmallDensenll(),
+        'small_dense_margin': dense_small.SmallDensemargin(),
         'large_dense_entropy' : dense_large.LargeDenseEntropy(),
         'large_dense_nll' : dense_large.LargeDensenll(),
+        'large_dense_margin': dense_large.LargeDensemargin(),
         'cnn_entropy'   : cnn.CNNentropy(),
         'cnn_nll'       : cnn.CNNnll(),
         'cnn_kldiv'     : cnn.CNNkldiv(),
         'cnn_gaussiannll': cnn.CNNgaussiannll(),
-        'cnn_poissonnll': cnn.CNNpoissoinnll()
+        'cnn_poissonnll': cnn.CNNpoissoinnll(),
+        'cnn_margin': cnn.CNNmargin()
         #'vit_entropy'   : vit.vitEntropy(),
         #'vit_nll'       : vit.vitNll()
         }
